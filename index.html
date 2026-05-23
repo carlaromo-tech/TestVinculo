@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Test Diagnóstico NIDO® | Conectar con Sentido</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --turquesa: #3E8DA1;
+    --coral: #EA8672;
+    --navy: #1E2D3D;
+    --rosa: #E07688;
+    --texto-suave: #5C6B7A;
+    --gris-medio: #8B8680;
+    --gris-borde: rgba(30, 45, 61, 0.12);
+    --gris-borde-fuerte: rgba(30, 45, 61, 0.25);
+    --blanco: #FFFFFF;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #FAF6F1;
+    min-height: 100vh;
+    color: var(--navy);
+    line-height: 1.6;
+    transition: background 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(62, 141, 161, 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(234, 134, 114, 0.04) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 28px;
+    margin-bottom: 8px;
+  }
+
+  .brand {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--navy);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .brand-divider {
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--gris-borde-fuerte);
+    margin: 0 10px 4px;
+    vertical-align: middle;
+  }
+
+  .estimated-time {
+    font-size: 11px;
+    color: var(--gris-medio);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .progress-wrapper {
+    margin-bottom: 32px;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+
+  .progress-counter {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    color: var(--navy);
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  .progress-counter strong {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .progress-percent {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    color: var(--texto-suave);
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 2px;
+    background: var(--gris-borde);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--navy);
+    width: 0%;
+    transition: width 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+    position: relative;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    right: -3px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    background: var(--coral);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(234, 134, 114, 0.15);
+  }
+
+  .card {
+    background: var(--blanco);
+    border-radius: 12px;
+    padding: 40px 28px;
+    flex: 1;
+    box-shadow:
+      0 1px 3px rgba(30, 45, 61, 0.04),
+      0 12px 40px rgba(30, 45, 61, 0.06);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--turquesa), var(--coral), var(--rosa));
+    opacity: 0.85;
+  }
+
+  .screen {
+    display: none;
+  }
+
+  .screen.active {
+    display: block;
+    animation: fadeUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* INTRO */
+  .intro {
+    text-align: center;
+  }
+
+  .intro-eyebrow {
+    font-family: 'Fraunces', serif;
+    font-size: 12px;
+    color: var(--coral);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .intro h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 18px;
+  }
+
+  .intro h1 em {
+    font-style: italic;
+    color: var(--coral);
+    font-weight: 500;
+  }
+
+  .intro-subtitle {
+    font-size: 15px;
+    color: var(--texto-suave);
+    max-width: 440px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+
+  .intro-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--gris-borde-fuerte);
+    margin: 32px auto;
+  }
+
+  .intro-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--navy);
+  }
+
+  .meta-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--turquesa);
+  }
+
+  /* QUESTION */
+  .question-number {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    color: var(--coral);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .question-number-num {
+    font-size: 24px;
+    font-family: 'Fraunces', serif;
+    color: var(--navy);
+    font-weight: 500;
+    font-style: italic;
+    letter-spacing: 0;
+    line-height: 1;
+  }
+
+  .question-text {
+    font-family: 'Fraunces', serif;
+    font-size: 23px;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 28px;
+    line-height: 1.35;
+    letter-spacing: -0.2px;
+  }
+
+  .question-divider {
+    width: 32px;
+    height: 1px;
+    background: var(--gris-borde-fuerte);
+    margin-bottom: 28px;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option {
+    padding: 16px 18px;
+    border: 1px solid var(--gris-borde);
+    border-radius: 10px;
+    background: var(--blanco);
+    cursor: pointer;
+    text-align: left;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    color: var(--navy);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    line-height: 1.45;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--coral);
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .option:hover:not(.selected) {
+    border-color: var(--gris-borde-fuerte);
+    background: #FAF6F1;
+    transform: translateX(2px);
+  }
+
+  .option.selected {
+    border-color: var(--navy);
+    background: var(--blanco);
+  }
+
+  .option.selected::before {
+    transform: scaleY(1);
+  }
+
+  .option-marker {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--gris-borde-fuerte);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    margin-top: 1px;
+    background: var(--blanco);
+  }
+
+  .option:hover:not(.selected) .option-marker {
+    border-color: var(--navy);
+  }
+
+  .option.selected .option-marker {
+    border-color: var(--coral);
+  }
+
+  .option.selected .option-marker::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: var(--coral);
+    border-radius: 50%;
+    animation: markerPop 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes markerPop {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+  }
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gris-borde);
+  }
+
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 28px;
+    border-radius: 100px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-primary {
+    background: var(--navy);
+    color: var(--blanco);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: var(--turquesa);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--texto-suave);
+    padding: 12px 16px;
+  }
+
+  .btn-ghost:hover {
+    color: var(--navy);
+  }
+
+  .btn-cta {
+    background: var(--coral);
+    color: var(--blanco);
+    font-size: 15px;
+    padding: 16px 32px;
+    font-weight: 600;
+    width: 100%;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(234, 134, 114, 0.25);
+  }
+
+  .btn-cta:hover {
+    background: var(--rosa);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(234, 134, 114, 0.35);
+  }
+
+  .btn-arrow {
+    transition: transform 0.25s ease;
+  }
+
+  .btn:hover .btn-arrow {
+    transform: translateX(3px);
+  }
+
+  /* RESULT */
+  .result-screen {
+    text-align: center;
+  }
+
+  .result-eyebrow {
+    font-family: 'Fraunces', serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .result-verde .result-eyebrow { color: #4A8B5C; }
+  .result-amarillo .result-eyebrow { color: #B5803A; }
+  .result-rojo .result-eyebrow { color: var(--coral); }
+
+  .result-icon-wrap {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulseGentle 3s ease-in-out 1s infinite;
+  }
+
+  .result-verde .result-icon-wrap {
+    background: #E8F0E5;
+    color: #4A8B5C;
+  }
+
+  .result-amarillo .result-icon-wrap {
+    background: #F5EAD4;
+    color: #B5803A;
+  }
+
+  .result-rojo .result-icon-wrap {
+    background: #FBE5E0;
+    color: var(--coral);
+  }
+
+  .result-icon-wrap svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .result-title {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.2;
+    letter-spacing: -0.4px;
+    margin-bottom: 12px;
+  }
+
+  .result-title em {
+    font-style: italic;
+    color: var(--coral);
+  }
+
+  .result-score {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    color: var(--gris-medio);
+    margin-bottom: 26px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .result-score strong {
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .result-text {
+    font-size: 15px;
+    color: var(--texto-suave);
+    text-align: left;
+    background: #FAF6F1;
+    padding: 28px 30px;
+    border-radius: 10px;
+    margin-bottom: 26px;
+    line-height: 1.75;
+    border-left: 3px solid var(--coral);
+  }
+
+  .result-text strong {
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .result-cta-text {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    color: var(--navy);
+    margin-bottom: 18px;
+    font-weight: 500;
+    font-style: italic;
+  }
+
+  .result-secondary {
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--gris-medio);
+    line-height: 1.6;
+  }
+
+  .result-secondary a {
+    color: var(--turquesa);
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(62, 141, 161, 0.3);
+  }
+
+  .footer {
+    text-align: center;
+    padding: 24px 0 16px;
+    margin-top: 8px;
+  }
+
+  .footer-name {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    color: var(--navy);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .footer-credentials {
+    font-size: 11px;
+    color: var(--gris-medio);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulseGentle {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  /* LOGO METODO NIDO en intro */
+  .intro-logo {
+    display: block;
+    margin: 0 auto 24px;
+    height: 90px;
+    width: auto;
+    max-width: 80%;
+    object-fit: contain;
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      padding: 20px 16px;
+    }
+    .card {
+      padding: 32px 22px;
+      border-radius: 10px;
+    }
+    .top-bar {
+      padding-bottom: 20px;
+    }
+    .brand {
+      font-size: 11px;
+      letter-spacing: 1.2px;
+    }
+    .estimated-time {
+      font-size: 10px;
+    }
+    .intro-logo {
+      height: 76px;
+      margin-bottom: 20px;
+    }
+    .intro-eyebrow {
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .intro h1 {
+      font-size: 26px;
+      line-height: 1.2;
+    }
+    .intro-subtitle {
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .question-number {
+      font-size: 12px;
+      letter-spacing: 2.5px;
+    }
+    .question-number-num {
+      font-size: 22px;
+    }
+    .question-text {
+      font-size: 21px;
+      line-height: 1.4;
+      margin-bottom: 24px;
+    }
+    .option {
+      padding: 16px 16px;
+      font-size: 15.5px;
+      line-height: 1.5;
+    }
+    .option-marker {
+      width: 22px;
+      height: 22px;
+    }
+    .nav {
+      margin-top: 24px;
+      padding-top: 18px;
+    }
+    .btn {
+      font-size: 14px;
+      padding: 12px 22px;
+    }
+    .btn-ghost {
+      padding: 12px 12px;
+    }
+    .btn-cta {
+      font-size: 15px;
+      padding: 16px 24px;
+    }
+    .result-eyebrow {
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+    .result-title {
+      font-size: 25px;
+      line-height: 1.25;
+    }
+    .result-score {
+      font-size: 12px;
+    }
+    .result-text {
+      font-size: 15.5px;
+      padding: 22px 22px;
+      line-height: 1.75;
+    }
+    .result-cta-text {
+      font-size: 16px;
+    }
+    .result-secondary {
+      font-size: 13px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .container { padding: 40px 24px; }
+    .card { padding: 56px 64px; }
+    .intro-logo { height: 100px; margin-bottom: 28px; }
+    .intro h1 { font-size: 38px; }
+    .question-text { font-size: 26px; }
+    .question-number-num { font-size: 26px; }
+    .result-title { font-size: 34px; }
+    .option { padding: 18px 22px; font-size: 15.5px; }
+    .intro-meta {
+      flex-direction: row;
+      justify-content: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container { max-width: 720px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="top-bar">
+    <div class="brand">
+      Conectar con Sentido
+    </div>
+    <div class="estimated-time" id="timeIndicator">~ 3 min</div>
+  </div>
+
+  <div class="progress-wrapper hidden" id="progressWrapper">
+    <div class="progress-info">
+      <span class="progress-counter">
+        <strong id="progressCurrent">01</strong> / 10
+      </span>
+      <span class="progress-percent" id="progressPercent">10%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <div class="card">
+
+    <div class="screen active intro" id="introScreen">
+      <img src="imagenes/logo_metodo_nido_transparente.png" alt="Método NIDO" class="intro-logo">
+      <div class="intro-eyebrow">Test diagnóstico · Madres y padres</div>
+      <h1>¿Cómo está hoy tu vínculo con tu <em>adolescente</em>?</h1>
+      <p class="intro-subtitle">Diez preguntas honestas para ver dónde estás parada hoy con tu hijo o hija. Sin juicio, sin moraleja, sin lista de tareas.</p>
+
+      <div class="intro-divider"></div>
+
+      <div class="intro-meta">
+        <div class="meta-item">
+          <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>3 minutos</span>
+        </div>
+        <div class="meta-item">
+          <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>Resultado inmediato</span>
+        </div>
+        <div class="meta-item">
+          <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/>
+          </svg>
+          <span>Diseñado por psicóloga PUC</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary" id="startBtn">
+        Empezar el test
+        <svg class="btn-arrow" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="screen" id="questionScreen">
+      <div class="question-number">
+        <span class="question-number-num" id="questionNumberDisplay">01</span>
+        <span>Pregunta</span>
+      </div>
+      <div class="question-divider"></div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="nav">
+        <button type="button" class="btn btn-ghost" id="backBtn">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
+          </svg>
+          Atrás
+        </button>
+        <button type="button" class="btn btn-primary" id="nextBtn" disabled>
+          <span id="nextBtnText">Siguiente</span>
+          <svg class="btn-arrow" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="screen result-screen" id="resultScreen">
+      <div class="result-eyebrow" id="resultEyebrow"></div>
+      <div class="result-icon-wrap" id="resultIcon"></div>
+      <h2 class="result-title" id="resultTitle"></h2>
+      <div class="result-score" id="resultScore"></div>
+      <div class="result-text" id="resultText"></div>
+      <div class="result-cta-text" id="resultCtaText"></div>
+      <a id="resultCtaButton" class="btn btn-cta" target="_blank" rel="noopener">Reservar Diagnóstico</a>
+      <div class="result-secondary" id="resultSecondary"></div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-name">Carla Romo Salcedo</div>
+    <div class="footer-credentials">Psicóloga Clínica PUC · Creadora del Método NIDO®</div>
+  </div>
+</div>
+
+<script>
+  const CALENDLY_LINK = "https://calendly.com/tu-usuario/diagnostico-nido";
+  const INSTAGRAM_LINK = "https://instagram.com/conectar_consentido";
+
+  const backgrounds = [
+    "#FAF6F1", "#FAF6F1",
+    "#F0EAE3", "#F0EAE3",
+    "#E8EFEF", "#E8EFEF",
+    "#F5E8E5", "#F5E8E5",
+    "#ECE7DD", "#ECE7DD",
+    "#FAF6F1"
+  ];
+
+  const questions = [
+    {
+      text: "Cuando tu hijo o hija llega a casa, ¿cuánto tiempo pasan hablando antes de que se encierre en su pieza?",
+      options: [
+        { text: "Más de 15 minutos, conversamos un rato", value: 1 },
+        { text: "Entre 5 y 15 minutos, lo justo", value: 2 },
+        { text: "Menos de 5 minutos, casi nada", value: 3 },
+        { text: "No habla, pasa directo a su pieza", value: 4 }
+      ]
+    },
+    {
+      text: "En la última semana, ¿cuántas conversaciones tuvieron que NO fueran sobre el colegio, tareas o cosas que tiene que hacer?",
+      options: [
+        { text: "Varias, casi todos los días", value: 1 },
+        { text: "Dos o tres", value: 2 },
+        { text: "Solo una", value: 3 },
+        { text: "Ninguna", value: 4 }
+      ]
+    },
+    {
+      text: "Cuando le preguntas algo, ¿cómo responde habitualmente?",
+      options: [
+        { text: "Cuenta con detalle, conversa", value: 1 },
+        { text: "Responde corto pero conversa", value: 2 },
+        { text: "Monosílabos: 'sí', 'no', 'ya'", value: 3 },
+        { text: "No responde o se molesta", value: 4 }
+      ]
+    },
+    {
+      text: "¿Con qué frecuencia terminas el día sintiendo que solo le hablaste para apurarlo, corregirlo o discutir?",
+      options: [
+        { text: "Casi nunca", value: 1 },
+        { text: "Algunos días", value: 2 },
+        { text: "La mayoría de los días", value: 3 },
+        { text: "Todos los días", value: 4 }
+      ]
+    },
+    {
+      text: "Cuando hay tensión entre ustedes, ¿cuánto tarda en resolverse?",
+      options: [
+        { text: "Mismo día, conversamos", value: 1 },
+        { text: "Al día siguiente se va pasando", value: 2 },
+        { text: "Varios días, queda incómodo", value: 3 },
+        { text: "Quedan conflictos sin resolver", value: 4 }
+      ]
+    },
+    {
+      text: "¿Cómo reaccionas tú cuando te cierra la puerta o no quiere hablar?",
+      options: [
+        { text: "Le doy espacio sin tomármelo personal", value: 1 },
+        { text: "Espero, pero me incomoda", value: 2 },
+        { text: "Insisto o me frustro", value: 3 },
+        { text: "Termino enojándome o gritando", value: 4 }
+      ]
+    },
+    {
+      text: "¿Cuánto sabes hoy de su vida real (amigos, intereses, lo que le preocupa)?",
+      options: [
+        { text: "Bastante, me cuenta lo que le pasa", value: 1 },
+        { text: "Lo básico, lo importante sí lo sé", value: 2 },
+        { text: "Muy poco, me entero por terceros", value: 3 },
+        { text: "Casi nada, vivimos en mundos separados", value: 4 }
+      ]
+    },
+    {
+      text: "Cuando ves a tu hijo o hija, ¿qué emoción tuya aparece más seguido?",
+      options: [
+        { text: "Cariño y conexión", value: 1 },
+        { text: "Preocupación", value: 2 },
+        { text: "Frustración o impotencia", value: 3 },
+        { text: "Distancia o tristeza", value: 4 }
+      ]
+    },
+    {
+      text: "¿Has sentido en los últimos tres meses que 'estás perdiendo' a tu hijo o hija?",
+      options: [
+        { text: "Nunca", value: 1 },
+        { text: "A veces", value: 2 },
+        { text: "Frecuentemente", value: 3 },
+        { text: "Casi todo el tiempo", value: 4 }
+      ]
+    },
+    {
+      text: "Si hoy tu hijo o hija tuviera un problema serio (emocional, social, escolar), ¿confías en que te lo contaría?",
+      options: [
+        { text: "Sí, claramente me lo contaría", value: 1 },
+        { text: "Probablemente sí", value: 2 },
+        { text: "No estoy segura", value: 3 },
+        { text: "No, creo que no me lo contaría", value: 4 }
+      ]
+    }
+  ];
+
+  let currentQuestion = 0;
+  let answers = new Array(questions.length).fill(null);
+
+  function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    document.getElementById(screenId).classList.add('active');
+  }
+
+  function changeBackground(index) {
+    document.body.style.background = backgrounds[index] || backgrounds[0];
+  }
+
+  function startTest() {
+    showScreen('questionScreen');
+    document.getElementById('progressWrapper').classList.remove('hidden');
+    document.getElementById('timeIndicator').textContent = '10 preguntas';
+    showQuestion(0);
+  }
+
+  function showQuestion(index) {
+    var q = questions[index];
+    var numStr = String(index + 1).padStart(2, '0');
+
+    document.getElementById('questionNumberDisplay').textContent = numStr;
+    document.getElementById('questionText').textContent = q.text;
+
+    var container = document.getElementById('optionsContainer');
+    container.innerHTML = '';
+
+    q.options.forEach(function(opt) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'option' + (answers[index] === opt.value ? ' selected' : '');
+      btn.innerHTML = '<span class="option-marker"></span><span>' + opt.text + '</span>';
+      btn.addEventListener('click', function() {
+        selectOption(index, opt.value, btn);
+      });
+      container.appendChild(btn);
+    });
+
+    updateProgress(index);
+    updateNavButtons(index);
+    changeBackground(index + 1);
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function selectOption(qIndex, value, btnEl) {
+    answers[qIndex] = value;
+    document.querySelectorAll('.option').forEach(function(el) {
+      el.classList.remove('selected');
+    });
+    btnEl.classList.add('selected');
+    document.getElementById('nextBtn').disabled = false;
+  }
+
+  function updateProgress(index) {
+    var percent = Math.round(((index + 1) / questions.length) * 100);
+    var numStr = String(index + 1).padStart(2, '0');
+    document.getElementById('progressFill').style.width = percent + '%';
+    document.getElementById('progressCurrent').textContent = numStr;
+    document.getElementById('progressPercent').textContent = percent + '%';
+  }
+
+  function updateNavButtons(index) {
+    document.getElementById('backBtn').style.visibility = index === 0 ? 'hidden' : 'visible';
+    document.getElementById('nextBtn').disabled = answers[index] === null;
+    document.getElementById('nextBtnText').textContent = (index === questions.length - 1) ? 'Ver resultado' : 'Siguiente';
+  }
+
+  function nextQuestion() {
+    if (answers[currentQuestion] === null) return;
+    if (currentQuestion < questions.length - 1) {
+      currentQuestion++;
+      showQuestion(currentQuestion);
+    } else {
+      showResult();
+    }
+  }
+
+  function previousQuestion() {
+    if (currentQuestion > 0) {
+      currentQuestion--;
+      showQuestion(currentQuestion);
+    }
+  }
+
+  function showResult() {
+    var total = answers.reduce(function(sum, val) {
+      return sum + (val || 0);
+    }, 0);
+
+    showScreen('resultScreen');
+    document.getElementById('progressWrapper').classList.add('hidden');
+    document.getElementById('timeIndicator').textContent = 'Resultado';
+
+    var resultEl = document.getElementById('resultScreen');
+    var eyebrowEl = document.getElementById('resultEyebrow');
+    var iconEl = document.getElementById('resultIcon');
+    var titleEl = document.getElementById('resultTitle');
+    var scoreEl = document.getElementById('resultScore');
+    var textEl = document.getElementById('resultText');
+    var ctaTextEl = document.getElementById('resultCtaText');
+    var ctaBtnEl = document.getElementById('resultCtaButton');
+    var secondaryEl = document.getElementById('resultSecondary');
+
+    resultEl.className = 'screen active result-screen';
+    scoreEl.innerHTML = 'Puntaje · <strong>' + total + ' de 40</strong>';
+
+    if (total <= 18) {
+      resultEl.classList.add('result-verde');
+      document.body.style.background = "#E8EFEF";
+      eyebrowEl.textContent = 'Conexión activa';
+      iconEl.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>';
+      titleEl.innerHTML = 'Tu vínculo tiene <em>buenas bases</em>';
+      textEl.innerHTML = 'Lo que describes en tus respuestas muestra los tres ingredientes que sostienen el vínculo en la adolescencia: comunicación que fluye, momentos de cercanía y confianza mutua.<br><br>Esto no significa que no haya conflictos —los hay en toda casa con adolescentes—, pero cuando aparecen, tienes desde dónde repararlos.<br><br>Una cosa que vale la pena saber: la adolescencia tiene fases. Lo que funciona a los 12 puede no funcionar a los 14, y a los 16 cambia de nuevo. La conexión que tienes hoy se sostiene si la cuidas con consciencia.';
+      ctaTextEl.textContent = '¿Quieres seguir fortaleciendo este vínculo?';
+      ctaBtnEl.innerHTML = 'Sígueme en Instagram <svg style="margin-left:6px" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>';
+      ctaBtnEl.href = INSTAGRAM_LINK;
+      secondaryEl.innerHTML = 'Si quieres una mirada externa más profunda sobre cómo está tu vínculo —algo así como un chequeo preventivo personalizado—, el <a href="' + CALENDLY_LINK + '" target="_blank">Diagnóstico Familiar NIDO</a> también sirve para eso.';
+    } else if (total <= 30) {
+      resultEl.classList.add('result-amarillo');
+      document.body.style.background = "#F5EAD4";
+      eyebrowEl.textContent = 'Modo Supervisor activado';
+      iconEl.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>';
+      titleEl.innerHTML = 'No es rebeldía. Es <em>defensa</em>.';
+      textEl.innerHTML = 'Lo que está pasando en tu casa tiene nombre: <strong>Modo Supervisor</strong>. Es ese estado en el que pasas más tiempo apurando, corrigiendo, preguntando o revisando, que conectando.<br><br>No es maldad ni descuido. Es lo que ocurre cuando estamos agotadas y nadie nos enseñó otra forma de acompañar la adolescencia.<br><br>El problema es que, cuando un adolescente siente que cada interacción contigo es un examen —aunque sea con amor—, su sistema nervioso aprende a esquivarte. No porque no te quiera. Porque se protege. Y eso explica los monosílabos, la puerta cerrada y los audífonos puestos.<br><br><strong>La buena noticia:</strong> en este punto el Modo Supervisor está <strong>activado, no instalado</strong>. La diferencia es importante: cuando está activado, los patrones todavía son flexibles y los cambios pueden implementarse con rapidez —siempre que sepas con claridad qué necesitas cambiar. Cuando se instala, el trabajo es más largo y requiere otro nivel de intervención.<br><br><strong>Lo que NO funciona acá:</strong> esperar a que pase con el tiempo o intentar más esfuerzo del mismo tipo (más control, más consejos).<br><br><strong>Lo que SÍ funciona:</strong> identificar <strong>dónde específicamente</strong> se activa tu Modo Supervisor en tu casa, con tu hijo, en tu rutina real. Eso requiere mirar tu dinámica concreta, no recibir consejos generales.';
+      ctaTextEl.textContent = 'Identifica qué cambiar específicamente en tu vínculo';
+      ctaBtnEl.innerHTML = 'Reservar Diagnóstico Familiar NIDO <svg style="margin-left:6px" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>';
+      ctaBtnEl.href = CALENDLY_LINK;
+      secondaryEl.innerHTML = '¿Tienes preguntas antes de agendar? Escríbeme a <a href="mailto:carla.romo@conectarconsentido.com">carla.romo@conectarconsentido.com</a>';
+    } else {
+      resultEl.classList.add('result-rojo');
+      document.body.style.background = "#FBE5E0";
+      eyebrowEl.textContent = 'Comunicación interrumpida';
+      iconEl.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>';
+      titleEl.innerHTML = 'Esto no es <em>"la adolescencia normal"</em>';
+      textEl.innerHTML = 'Lo que describes ya no es Modo Supervisor activado. Es Modo Supervisor <strong>instalado</strong> hace tiempo, junto con un canal de comunicación que se cerró.<br><br>Tu hijo o hija dejó de intentar contarte cosas. Tú dejaste de saber quién es por dentro. Conviven en la misma casa, pero no se encuentran.<br><br>Esto no es la adolescencia haciendo lo suyo. La adolescencia tensa el vínculo, no lo apaga. Lo que muestran tus respuestas es un patrón de desconexión que requiere intervención específica, no más tiempo ni más paciencia.<br><br><strong>Lo que tu hijo o hija necesita de ti:</strong> que estés disponible, regulada y con un mapa claro de qué hacer. Hoy no tienes ninguna de las tres cosas, y no porque seas mala madre o mal padre. Porque estás agotada, sola en esto, y nadie te enseñó.<br><br>Un consejo de Instagram no alcanza acá. Un libro no alcanza. "Darle espacio" no es estrategia, es esperar a que algo más serio aparezca.<br><br>El <strong>Diagnóstico Familiar NIDO</strong> está diseñado exactamente para esta zona: 3 sesiones clínicas, un informe escrito de tu situación específica y un plan personalizado para empezar a recuperar el vínculo.';
+      ctaTextEl.textContent = 'No esperes más. Esta semana puedes empezar.';
+      ctaBtnEl.innerHTML = 'Agendar mi Diagnóstico ahora <svg style="margin-left:6px" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>';
+      ctaBtnEl.href = CALENDLY_LINK;
+      secondaryEl.innerHTML = 'Si necesitas hablar antes de agendar, escríbeme directamente a <a href="mailto:carla.romo@conectarconsentido.com">carla.romo@conectarconsentido.com</a>';
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.getElementById('startBtn').addEventListener('click', startTest);
+  document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+  document.getElementById('backBtn').addEventListener('click', previousQuestion);
+</script>
+
+</body>
+</html>
