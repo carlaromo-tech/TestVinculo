@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Test Diagnóstico NIDO® | Conectar con Sentido</title>
+<meta name="description" content="Diez preguntas honestas para ver cómo está hoy tu vínculo con tu adolescente. Resultado inmediato. Sin juicio.">
+<meta property="og:title" content="¿Cómo está tu vínculo con tu adolescente? · Test NIDO®">
+<meta property="og:description" content="Diez preguntas honestas para ver dónde estás parada hoy. Sin juicio, sin moraleja, sin lista de tareas. Resultado inmediato.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://carlaromo-tech.github.io/TestVinculo/">
+<meta property="og:image" content="https://carlaromo-tech.github.io/TestVinculo/imagenes/logo_metodo_nido_transparente.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="¿Cómo está tu vínculo con tu adolescente? · Test NIDO®">
+<meta name="twitter:description" content="Diez preguntas honestas para ver dónde estás parada hoy. Resultado inmediato.">
+<link rel="icon" type="image/png" href="imagenes/logo_metodo_nido_transparente.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -851,7 +861,7 @@
       <div class="result-score" id="resultScore"></div>
       <div class="result-text" id="resultText"></div>
       <div class="result-cta-text" id="resultCtaText"></div>
-      <a id="resultCtaButton" class="btn btn-cta" target="_blank" rel="noopener">Reservar Diagnóstico</a>
+      <a id="resultCtaButton" class="btn btn-cta" target="_blank" rel="noopener"></a>
       <div class="result-secondary" id="resultSecondary"></div>
     </div>
 
@@ -1088,7 +1098,7 @@
       ctaTextEl.textContent = '¿Quieres seguir fortaleciendo este vínculo?';
       ctaBtnEl.innerHTML = 'Sígueme en Instagram <svg style="margin-left:6px" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>';
       ctaBtnEl.href = INSTAGRAM_LINK;
-      secondaryEl.innerHTML = 'Si quieres una mirada externa más profunda sobre cómo está tu vínculo —algo así como un chequeo preventivo personalizado—, el <a href="' + CALENDLY_LINK + '" target="_blank">Evaluación Familiar del Adolescente NIDO</a> también sirve para eso.';
+      secondaryEl.innerHTML = 'Si quieres una mirada externa más profunda sobre cómo está tu vínculo —algo así como un chequeo preventivo personalizado—, la <a href="' + CALENDLY_LINK + '" target="_blank">Evaluación Familiar del Adolescente NIDO</a> también sirve para eso.';
     } else if (total <= 30) {
       resultEl.classList.add('result-amarillo');
       document.body.style.background = "#F5EAD4";
@@ -1106,9 +1116,9 @@
       eyebrowEl.textContent = 'Comunicación interrumpida';
       iconEl.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>';
       titleEl.innerHTML = 'Esto no es <em>"la adolescencia normal"</em>';
-      textEl.innerHTML = 'Lo que describes ya no es Modo Supervisor activado. Es Modo Supervisor <strong>instalado</strong> hace tiempo, junto con un canal de comunicación que se cerró.<br><br>Tu hijo o hija dejó de intentar contarte cosas. Tú dejaste de saber quién es por dentro. Conviven en la misma casa, pero no se encuentran.<br><br>Esto no es la adolescencia haciendo lo suyo. La adolescencia tensa el vínculo, no lo apaga. Lo que muestran tus respuestas es un patrón de desconexión que requiere intervención específica, no más tiempo ni más paciencia.<br><br><strong>Lo que tu hijo o hija necesita de ti:</strong> que estés disponible, regulada y con un mapa claro de qué hacer. Hoy no tienes ninguna de las tres cosas, y no porque seas mala madre o mal padre. Porque estás agotada, sola en esto, y nadie te enseñó.<br><br>Un consejo de Instagram no alcanza acá. Un libro no alcanza. "Darle espacio" no es estrategia, es esperar a que algo más serio aparezca.<br><br>El <strong>Evaluación Familiar del Adolescente NIDO</strong> está diseñado exactamente para esta zona: 3 sesiones clínicas, un informe escrito de tu situación específica y un plan personalizado para empezar a recuperar el vínculo.';
+      textEl.innerHTML = 'Lo que describes ya no es Modo Supervisor activado. Es Modo Supervisor <strong>instalado</strong> hace tiempo, junto con un canal de comunicación que se cerró.<br><br>Tu hijo o hija dejó de intentar contarte cosas. Tú dejaste de saber quién es por dentro. Conviven en la misma casa, pero no se encuentran.<br><br>Esto no es la adolescencia haciendo lo suyo. La adolescencia tensa el vínculo, no lo apaga. Lo que muestran tus respuestas es un patrón de desconexión que requiere intervención específica, no más tiempo ni más paciencia.<br><br><strong>Lo que tu hijo o hija necesita de ti:</strong> que estés disponible, regulada y con un mapa claro de qué hacer. Hoy no tienes ninguna de las tres cosas, y no porque seas mala madre o mal padre. Porque estás agotada, sola en esto, y nadie te enseñó.<br><br>Un consejo de Instagram no alcanza acá. Un libro no alcanza. "Darle espacio" no es estrategia, es esperar a que algo más serio aparezca.<br><br>La <strong>Evaluación Familiar del Adolescente NIDO</strong> está diseñada exactamente para esta zona: 3 sesiones clínicas, un informe escrito de tu situación específica y un plan personalizado para empezar a recuperar el vínculo.';
       ctaTextEl.textContent = 'No esperes más. Esta semana puedes empezar.';
-      ctaBtnEl.innerHTML = 'Agendar mi Diagnóstico ahora <svg style="margin-left:6px" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>';
+      ctaBtnEl.innerHTML = 'Agendar mi Evaluación ahora <svg style="margin-left:6px" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>';
       ctaBtnEl.href = CALENDLY_LINK;
       secondaryEl.innerHTML = 'Si necesitas hablar antes de agendar, escríbeme directamente a <a href="mailto:carla.romo@conectarconsentido.com">carla.romo@conectarconsentido.com</a>';
     }
