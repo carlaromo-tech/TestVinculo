@@ -767,6 +767,7 @@
     }
   }
 </style>
+<script src="https://tally.so/widgets/embed.js"></script>
 </head>
 <body>
 
@@ -1055,7 +1056,7 @@
       currentQuestion++;
       showQuestion(currentQuestion);
     } else {
-      showResult();
+      requestLead();
     }
   }
 
@@ -1131,5 +1132,6 @@
   document.getElementById('backBtn').addEventListener('click', previousQuestion);
 </script>
 
+<script src="tally-integration.js"></script>
 </body>
 </html>
