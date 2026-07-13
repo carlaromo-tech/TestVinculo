@@ -16,7 +16,7 @@ jobs:
       - name: Descargar repositorio
         uses: actions/checkout@v4
 
-      - name: Conectar el resultado con Tally
+      - name: Modificar el test
         shell: bash
         run: |
           python - <<'PY'
@@ -25,7 +25,33 @@ jobs:
           path = Path('index.html')
           html = path.read_text(encoding='utf-8')
 
-          def replace_once(old, new, label):
-              global html
-              if old not in html:
-                  raise SystemExit(f'No se encontró el
+          tally_widget = '<script src="https://tally.so/widgets/embed.js"></script>'
+          integration_script = '<script src="tally-integration.js"></script>'
+
+          if tally_widget not in html:
+              html = html.replace('</head>', tally_widget + '\n</head>', 1)
+
+          if integration_script not in html:
+              html = html.replace('</body>', integration_script + '\n</body>', 1)
+
+          old = "    } else {\n      showResult();\n    }"
+          new = "    } else {\n      requestLead();\n    }"
+          if old in html:
+              html = html.replace(old, new, 1)
+          elif 'requestLead();' not in html:
+              raise SystemExit('No se encontró el paso final del test')
+
+          path.write_text(html, encoding='utf-8')
+          PY
+
+      - name: Publicar cambio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "El test ya estaba conectado"
+          else
+            git commit -m "Conecta resultados del test con Tally"
+            git push
+          fi
