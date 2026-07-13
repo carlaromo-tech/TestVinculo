@@ -1,0 +1,31 @@
+name: Integrar Tally en el test
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/integrar-tally.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Conectar el resultado con Tally
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+
+          def replace_once(old, new, label):
+              global html
+              if old not in html:
+                  raise SystemExit(f'No se encontró el
